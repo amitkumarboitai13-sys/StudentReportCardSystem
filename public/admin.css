@@ -1,0 +1,129 @@
+
+/* ===== Premium Admin Dashboard Enhancements ===== */
+
+body {
+    background: radial-gradient(ellipse at 0% 5%, rgba(99, 102, 241, 0.08), transparent 28%), radial-gradient(ellipse at 100% 45%, rgba(56, 189, 248, 0.07), transparent 28%), #f5f7fc;
+}
+
+.topbar {
+    position: relative;
+    overflow: hidden;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    background: linear-gradient(115deg, #111832, #272768 55%, #4f46e5);
+}
+
+    .topbar::after {
+        content: "";
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        right: 10%;
+        top: -170px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 50%;
+        box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.035), 0 0 0 65px rgba(255, 255, 255, 0.025);
+        pointer-events: none;
+    }
+
+    .topbar > * {
+        position: relative;
+        z-index: 1;
+    }
+
+.welcome {
+    padding: 8px 0 5px;
+}
+
+    .welcome h2 {
+        color: #20254a;
+    }
+
+.stat-card {
+    border-top: 3px solid #6366f1;
+    background: linear-gradient(145deg, #ffffff, #fafaff);
+}
+
+    .stat-card:nth-child(2) {
+        border-top-color: #38bdf8;
+    }
+
+    .stat-card:nth-child(3) {
+        border-top-color: #34d399;
+    }
+
+    .stat-card strong {
+        color: #292765;
+    }
+
+.panel {
+    transition: box-shadow 0.25s, transform 0.25s;
+}
+
+    .panel:hover {
+        box-shadow: 0 13px 35px rgba(30, 41, 59, 0.075);
+    }
+
+    .panel h2 {
+        color: #25294b;
+    }
+
+input {
+    background: #fafbff;
+}
+
+button {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.10);
+}
+
+    button.secondary,
+    button.update {
+        box-shadow: none;
+    }
+
+.table-wrapper {
+    box-shadow: 0 3px 12px rgba(30, 41, 59, 0.025);
+}
+
+thead {
+    background: #eef2ff;
+}
+
+th {
+    color: #3730a3;
+}
+
+tbody tr:hover {
+    background: #f1f4ff;
+}
+
+.message {
+    overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .stat-card {
+        animation: cardEntrance 0.45s ease-out both;
+    }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+}
+
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(9px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

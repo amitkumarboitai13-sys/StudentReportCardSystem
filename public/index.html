@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Portal | Academic Report Card</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f1f5fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(120deg, #172554, #4338ca);
+            color: white;
+            padding: 22px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.16);
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+        }
+
+        header h1 {
+            font-size: 21px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #dbeafe;
+            margin-top: 4px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: rgba(255,255,255,.13);
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        main {
+            width: min(960px, 92%);
+            margin: 40px auto;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+            .intro .eyebrow {
+                color: #4f46e5;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+
+            .intro h2 {
+                font-size: clamp(27px, 5vw, 38px);
+                margin-bottom: 10px;
+            }
+
+            .intro p {
+                color: #64748b;
+                line-height: 1.6;
+            }
+
+        .search-card {
+            max-width: 680px;
+            margin: 0 auto 30px;
+            background: white;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(30, 41, 59, .06);
+        }
+
+            .search-card label {
+                display: block;
+                font-weight: 650;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+        }
+
+            .search-row input {
+                flex: 1;
+                min-width: 0;
+                padding: 14px;
+                border: 1px solid #cbd5e1;
+                border-radius: 10px;
+                font-size: 15px;
+                outline: none;
+            }
+
+                .search-row input:focus {
+                    border-color: #6366f1;
+                    box-shadow: 0 0 0 3px #e0e7ff;
+                }
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 13px 21px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+            button:hover {
+                transform: translateY(-1px);
+            }
+
+        .search-button {
+            background: #4338ca;
+            color: white;
+        }
+
+            .search-button:disabled {
+                opacity: .65;
+                cursor: wait;
+            }
+
+        #searchMessage {
+            color: #b91c1c;
+            font-size: 14px;
+            margin-top: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Report card */
+
+        #result:empty {
+            display: none;
+        }
+
+        .report-card {
+            background: white;
+            border: 1px solid #dce4f0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(30, 41, 59, .08);
+        }
+
+        .report-header {
+            background: linear-gradient(120deg, #1e3a8a, #4f46e5);
+            color: white;
+            padding: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+        }
+
+            .report-header .small-title {
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1.8px;
+                color: #c7d2fe;
+                margin-bottom: 8px;
+            }
+
+            .report-header h2 {
+                font-size: 25px;
+                margin-bottom: 7px;
+            }
+
+            .report-header p {
+                color: #e0e7ff;
+                font-size: 13px;
+            }
+
+        .report-symbol {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            background: rgba(255,255,255,.15);
+            display: grid;
+            place-items: center;
+            font-size: 34px;
+            flex-shrink: 0;
+        }
+
+        .student-details {
+            padding: 24px 28px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+            margin-bottom: 7px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            padding: 24px 28px;
+        }
+
+        .summary-box {
+            border-radius: 14px;
+            padding: 19px;
+            background: #f8fafc;
+            border: 1px solid #e8edf5;
+        }
+
+            .summary-box.average {
+                background: #eef2ff;
+                border-color: #c7d2fe;
+            }
+
+            .summary-box.grade {
+                background: #ecfdf5;
+                border-color: #bbf7d0;
+            }
+
+        .summary-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            font-size: 27px;
+            font-weight: 800;
+            color: #1e293b;
+            overflow-wrap: anywhere;
+        }
+
+        .average .summary-value {
+            color: #4338ca;
+        }
+
+        .grade .summary-value {
+            color: #047857;
+        }
+
+        .subjects {
+            padding: 0 28px 26px;
+        }
+
+            .subjects h3 {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 330px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px 13px;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+            td:last-child, th:last-child {
+                text-align: right;
+            }
+
+        .marks-pill {
+            display: inline-block;
+            background: #eef2ff;
+            color: #4338ca;
+            font-weight: 750;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .report-footer {
+            padding: 18px 28px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.7;
+            border-top: 1px solid #e8edf5;
+        }
+
+        .report-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 28px 25px;
+        }
+
+        .print-button {
+            background: #172554;
+            color: white;
+        }
+
+        .empty-marks {
+            text-align: center !important;
+            color: #64748b;
+            padding: 24px;
+        }
+
+        footer {
+            text-align: center;
+            color: #94a3b8;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            main {
+                margin: 28px auto;
+            }
+
+            .search-card {
+                padding: 18px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+                .search-row button {
+                    width: 100%;
+                }
+
+            .report-header {
+                padding: 22px 18px;
+            }
+
+                .report-header h2 {
+                    font-size: 21px;
+                }
+
+            .report-symbol {
+                width: 50px;
+                height: 50px;
+                font-size: 26px;
+            }
+
+            .student-details {
+                padding: 20px 18px;
+                gap: 18px 12px;
+            }
+
+            .summary {
+                padding: 18px;
+                gap: 8px;
+            }
+
+            .summary-box {
+                padding: 12px 9px;
+            }
+
+            .summary-value {
+                font-size: 22px;
+            }
+
+            .subjects {
+                padding: 0 18px 22px;
+            }
+
+            .report-actions {
+                padding: 0 18px 22px;
+            }
+
+            .report-footer {
+                padding: 16px 18px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            header, .intro, .search-card, footer,
+            .report-actions {
+                display: none !important;
+            }
+
+            main {
+                width: 100%;
+                margin: 0;
+            }
+
+            .report-card {
+                box-shadow: none;
+                border: 1px solid #cbd5e1;
+                break-inside: avoid;
+            }
+
+            .report-header {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+
+            .summary-box, .marks-pill, .report-footer {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+            <div>
+                <h1>Student Portal</h1>
+                <p>Academic Performance & Results</p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="admin.html">Admin Portal ↗</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro">
+            <p class="eyebrow">Academic Excellence</p>
+            <h2>Your Academic Report Card</h2>
+            <p>Enter your roll number to view your student details and subject-wise results.</p>
+        </section>
+
+        <section class="search-card">
+            <form id="searchForm">
+                <label for="rollNo">Student Roll Number</label>
+
+                <div class="search-row">
+                    <input type="number"
+                           id="rollNo"
+                           min="1"
+                           step="1"
+                           placeholder="Enter your roll number"
+                           required>
+
+                    <button type="submit" id="searchButton" class="search-button">
+                        View Report →
+                    </button>
+                </div>
+
+                <p id="searchMessage" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <!-- The report card will be displayed here -->
+        <section id="result" aria-live="polite"></section>
+    </main>
+
+    <footer>
+        Student Report Card System · Academic Results Portal
+    </footer>
+
+    <script>
+                const API = "http://127.0.0.1:5555/api";
+
+                const searchForm = document.getElementById("searchForm");
+                const rollNoInput = document.getElementById("rollNo");
+                const result = document.getElementById("result");
+                const searchMessage = document.getElementById("searchMessage");
+                const searchButton = document.getElementById("searchButton");
+
+                function addCell(row, value, className = "") {
+                    const cell = document.createElement("td");
+                    cell.textContent = String(value ?? "");
+
+                    if (className) {
+                        cell.className = className;
+                    }
+
+                    row.appendChild(cell);
+                    return cell;
+                }
+
+                function addDetail(container, label, value) {
+                    const box = document.createElement("div");
+
+                    const labelElement = document.createElement("p");
+                    labelElement.className = "detail-label";
+                    labelElement.textContent = label;
+
+                    const valueElement = document.createElement("p");
+                    valueElement.className = "detail-value";
+                    valueElement.textContent = String(value ?? "—");
+
+                    box.append(labelElement, valueElement);
+                    container.appendChild(box);
+                }
+
+                function addSummary(container, label, value, className = "") {
+                    const box = document.createElement("div");
+                    box.className = `summary-box ${className}`.trim();
+
+                    const labelElement = document.createElement("p");
+                    labelElement.className = "summary-label";
+                    labelElement.textContent = label;
+
+                    const valueElement = document.createElement("p");
+                    valueElement.className = "summary-value";
+                    valueElement.textContent = String(value);
+
+                    box.append(labelElement, valueElement);
+                    container.appendChild(box);
+                }
+
+                function renderReport(student) {
+                    result.replaceChildren();
+
+                    const card = document.createElement("article");
+                    card.className = "report-card";
+
+                    // Report header
+                    const reportHeader = document.createElement("div");
+                    reportHeader.className = "report-header";
+
+                    const heading = document.createElement("div");
+
+                    const smallTitle = document.createElement("p");
+                    smallTitle.className = "small-title";
+                    smallTitle.textContent = "Official Academic Record";
+
+                    const title = document.createElement("h2");
+                    title.textContent = "Student Report Card";
+
+                    const subtitle = document.createElement("p");
+                    subtitle.textContent = "Academic Performance Summary";
+
+                    heading.append(smallTitle, title, subtitle);
+
+                    const symbol = document.createElement("div");
+                    symbol.className = "report-symbol";
+                    symbol.textContent = "🏅";
+                    symbol.setAttribute("aria-hidden", "true");
+
+                    reportHeader.append(heading, symbol);
+
+                    // Student details
+                    const details = document.createElement("div");
+                    details.className = "student-details";
+
+                    addDetail(details, "Student Name", student.name);
+                    addDetail(details, "Roll Number", student.roll_no);
+
+                    // Summary cards
+                    const summary = document.createElement("div");
+                    summary.className = "summary";
+
+                    const marks = Array.isArray(student.marks) ? student.marks : [];
+
+                    const average = student.average == null
+                        ? null
+                        : Number(student.average);
+
+                    addSummary(
+                        summary,
+                        "Subjects Recorded",
+                        marks.length
+                    );
+
+                    addSummary(
+                        summary,
+                        "Overall Average",
+                        average !== null && Number.isFinite(average)
+                            ? average.toFixed(2)
+                            : "—",
+                        "average"
+                    );
+
+                    addSummary(
+                        summary,
+                        "Final Grade",
+                        student.grade || "—",
+                        "grade"
+                    );
+
+                    // Subject table
+                    const subjects = document.createElement("section");
+                    subjects.className = "subjects";
+
+                    const subjectsTitle = document.createElement("h3");
+                    subjectsTitle.textContent = "Subject-wise Performance";
+
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "table-wrapper";
+
+                    const table = document.createElement("table");
+                    const thead = document.createElement("thead");
+                    const headerRow = document.createElement("tr");
+
+                    ["Subject", "Marks Obtained"].forEach(text => {
+                        const th = document.createElement("th");
+                        th.textContent = text;
+                        headerRow.appendChild(th);
+                    });
+
+                    thead.appendChild(headerRow);
+
+                    const tbody = document.createElement("tbody");
+
+                    if (marks.length === 0) {
+                        const row = document.createElement("tr");
+                        const cell = document.createElement("td");
+
+                        cell.colSpan = 2;
+                        cell.className = "empty-marks";
+                        cell.textContent = "No subject marks have been added yet.";
+
+                        row.appendChild(cell);
+                        tbody.appendChild(row);
+                    } else {
+                        marks.forEach(subject => {
+                            const row = document.createElement("tr");
+
+                            addCell(row, subject.subject_name);
+
+                            const marksCell = addCell(row, "");
+                            const pill = document.createElement("span");
+                            pill.className = "marks-pill";
+                            pill.textContent = `${subject.marks} / 100`;
+                            marksCell.appendChild(pill);
+
+                            tbody.appendChild(row);
+                        });
+                    }
+
+                    table.append(thead, tbody);
+                    wrapper.appendChild(table);
+                    subjects.append(subjectsTitle, wrapper);
+
+                    // Print button
+                    const actions = document.createElement("div");
+                    actions.className = "report-actions";
+
+                    const printButton = document.createElement("button");
+                    printButton.type = "button";
+                    printButton.className = "print-button";
+                    printButton.textContent = "🖨 Print Report Card";
+                    printButton.addEventListener("click", () => window.print());
+
+                    actions.appendChild(printButton);
+
+                    // Footer
+                    const reportFooter = document.createElement("div");
+                    reportFooter.className = "report-footer";
+                    reportFooter.textContent =
+                        "This report displays the academic information currently recorded in the Student Report Card System.";
+
+                    card.append(
+                        reportHeader,
+                        details,
+                        summary,
+                        subjects,
+                        actions,
+                        reportFooter
+                    );
+
+                    result.appendChild(card);
+                }
+
+                searchForm.addEventListener("submit", async event => {
+                    event.preventDefault();
+
+                    const rollNo = rollNoInput.value.trim();
+
+                    if (!rollNo || Number(rollNo) <= 0) {
+                        searchMessage.textContent = "Please enter a valid roll number.";
+                        result.replaceChildren();
+                        return;
+                    }
+
+                    searchButton.disabled = true;
+                    searchButton.textContent = "Loading...";
+                    searchMessage.textContent = "";
+                    result.replaceChildren();
+
+                    try {
+                        const response = await fetch(
+                            `${API}/students/${encodeURIComponent(rollNo)}`
+                        );
+
+                        const text = await response.text();
+
+                        let data = null;
+
+                        if (text) {
+                            try {
+                                data = JSON.parse(text);
+                            } catch {
+                                data = text;
+                            }
+                        }
+
+                        if (!response.ok) {
+                            throw new Error(
+                                response.status === 404
+                                    ? "No student found with this roll number."
+                                    : typeof data === "string"
+                                        ? data
+                                        : data?.message || `Request failed (${response.status}).`
+                            );
+                        }
+
+                        if (!data || typeof data !== "object" || Array.isArray(data)) {
+                            throw new Error("The server returned an unexpected response.");
+                        }
+
+                        renderReport(data);
+                        searchMessage.textContent = "";
+                    } catch (error) {
+                        result.replaceChildren();
+
+                        searchMessage.textContent =
+                            error instanceof TypeError
+                                ? "Unable to connect. Check that Drogon is running and CORS is configured."
+                                : error.message || "Unable to load the report card.";
+                    } finally {
+                        searchButton.disabled = false;
+                        searchButton.textContent = "View Report →";
+                    }
+                });
+    </script>
+</body>
+</html>

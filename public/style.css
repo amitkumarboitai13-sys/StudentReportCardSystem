@@ -1,0 +1,96 @@
+
+/* ===== Premium Student Portal Enhancements ===== */
+
+body {
+    background: radial-gradient(ellipse at 5% 15%, rgba(99, 102, 241, 0.10), transparent 35%), radial-gradient(ellipse at 95% 65%, rgba(56, 189, 248, 0.09), transparent 32%), #f5f7fc;
+}
+
+header {
+    position: relative;
+    overflow: hidden;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    background: linear-gradient(120deg, #111832, #272768 55%, #4f46e5);
+}
+
+    header::after {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        right: 8%;
+        top: -145px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        box-shadow: 0 0 0 28px rgba(255, 255, 255, 0.035), 0 0 0 58px rgba(255, 255, 255, 0.025);
+        pointer-events: none;
+    }
+
+main {
+    position: relative;
+    max-width: 960px;
+}
+
+#searchForm {
+    border-top: 3px solid #6366f1;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+    #searchForm:hover {
+        box-shadow: 0 15px 38px rgba(49, 46, 129, 0.09);
+    }
+
+    #searchForm button {
+        background: linear-gradient(135deg, #4f46e5, #3730a3);
+        box-shadow: 0 5px 12px rgba(79, 70, 229, 0.17);
+    }
+
+#result:not(:empty) {
+    animation: resultAppear 0.35s ease-out;
+    border-top: 3px solid #4f46e5;
+}
+
+#result h2 {
+    color: #292765;
+}
+
+#result h3 {
+    margin-top: 25px;
+    color: #3730a3;
+}
+
+#result table {
+    overflow: hidden;
+    border: 1px solid #e8ebf3;
+    border-radius: 12px;
+}
+
+#result th {
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+#result td {
+    transition: background 0.2s;
+}
+
+#result tr:hover td {
+    background: #f1f4ff;
+}
+
+footer {
+    border-top: 1px solid #e8ebf3;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+@keyframes resultAppear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

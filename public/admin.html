@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Student Report Card</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f3f6fc;
+            color: #172033;
+        }
+
+        header {
+            background: linear-gradient(120deg, #172554, #4338ca);
+            color: white;
+            padding: 24px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+            header h1 {
+                font-size: 25px;
+                margin-bottom: 5px;
+            }
+
+            header p {
+                color: #dbeafe;
+                font-size: 14px;
+            }
+
+        nav {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 10px 16px;
+                border-radius: 9px;
+                background: rgba(255,255,255,.12);
+            }
+
+                nav a:hover {
+                    background: rgba(255,255,255,.25);
+                }
+
+        main {
+            width: min(1200px, 92%);
+            margin: 32px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+            .welcome h2 {
+                font-size: 27px;
+                margin-bottom: 8px;
+            }
+
+            .welcome p {
+                color: #64748b;
+            }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #e5eaf3;
+            box-shadow: 0 5px 18px rgba(15, 23, 42, .04);
+        }
+
+            .stat-card span {
+                color: #64748b;
+                font-size: 14px;
+            }
+
+            .stat-card h2 {
+                font-size: 32px;
+                margin-top: 12px;
+                color: #4338ca;
+            }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5eaf3;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(15, 23, 42, .04);
+        }
+
+            .panel h2 {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
+
+        .panel-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+            .field input:focus {
+                border-color: #6366f1;
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, .12);
+            }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+            button:hover {
+                transform: translateY(-1px);
+                opacity: .9;
+            }
+
+        .primary {
+            background: #4338ca;
+            color: white;
+        }
+
+        .secondary {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .danger {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message {
+            margin-top: 14px;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 15px 13px;
+            text-align: left;
+            border-bottom: 1px solid #e9edf5;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8faff;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+            .row-actions button {
+                padding: 8px 11px;
+            }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px 5%;
+            }
+
+                header h1 {
+                    font-size: 21px;
+                }
+
+            main {
+                width: 94%;
+                margin-top: 22px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            .welcome h2 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Student Report Card</h1>
+            <p>Administration Dashboard</p>
+        </div>
+
+        <nav>
+            <a href="admin.html">Admin Dashboard</a>
+            <a href="index.html">Student Portal</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Welcome, Administrator 👋</h2>
+            <p>Manage student details, subject marks, and academic records.</p>
+        </section>
+
+        <!-- Student statistics only -->
+        <section class="stats">
+            <div class="stat-card">
+                <span>Total Students</span>
+                <h2 id="totalStudents">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Management</span>
+                <h2 style="font-size: 23px;">Student Records</h2>
+            </div>
+        </section>
+
+        <!-- Add Student -->
+        <section class="panel">
+            <h2>➕ Add New Student</h2>
+            <p class="panel-description">
+                Register a student using their roll number and full name.
+            </p>
+
+            <form id="addStudentForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="rollNo">Roll Number</label>
+                        <input type="number"
+                               id="rollNo"
+                               min="1"
+                               step="1"
+                               placeholder="Enter roll number"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="studentName">Student Name</label>
+                        <input type="text"
+                               id="studentName"
+                               maxlength="100"
+                               placeholder="Enter full name"
+                               required>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="primary">Add Student</button>
+                </div>
+
+                <p id="addMessage" class="message" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <!-- Manage Subject Marks -->
+        <section class="panel">
+            <h2>📝 Manage Subject Marks</h2>
+            <p class="panel-description">
+                Add marks for a subject or update an existing subject's marks.
+            </p>
+
+            <form id="marksForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="marksRollNo">Student Roll Number</label>
+                        <input type="number"
+                               id="marksRollNo"
+                               min="1"
+                               step="1"
+                               placeholder="Enter roll number"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="subjectName">Subject Name</label>
+                        <input type="text"
+                               id="subjectName"
+                               maxlength="100"
+                               placeholder="e.g. Mathematics"
+                               required>
+                    </div>
+
+                    <div class="field">
+                        <label for="subjectMarks">Marks (0–100)</label>
+                        <input type="number"
+                               id="subjectMarks"
+                               min="0"
+                               max="100"
+                               step="1"
+                               placeholder="Enter marks"
+                               required>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button type="button" id="addMarksButton" class="primary">
+                        Add Marks
+                    </button>
+
+                    <button type="button" id="updateMarksButton" class="secondary">
+                        Update Marks
+                    </button>
+                </div>
+
+                <p id="marksMessage" class="message" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <!-- Student Records -->
+        <section class="panel">
+            <h2>👨‍🎓 Student Records</h2>
+            <p class="panel-description">
+                View registered students or remove a student record.
+            </p>
+
+            <div class="actions">
+                <button type="button" id="refreshButton" class="secondary">
+                    ↻ Refresh Records
+                </button>
+            </div>
+
+            <p id="recordsMessage" class="message" aria-live="polite"></p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Average</th>
+                            <th>Grade</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="studentTable">
+                        <tr>
+                            <td colspan="5" class="empty">Loading student records...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Student Report Card System · Admin Dashboard
+    </footer>
+
+    <script>
+                const API = "http://127.0.0.1:5555/api";
+
+                const addMessage = document.getElementById("addMessage");
+                const marksMessage = document.getElementById("marksMessage");
+                const recordsMessage = document.getElementById("recordsMessage");
+
+                function showMessage(element, message, success = false) {
+                    element.textContent = message;
+                    element.style.color = success ? "#15803d" : "#b91c1c";
+                }
+
+                async function apiRequest(url, options = {}) {
+                    const response = await fetch(url, {
+                        ...options,
+                        headers: {
+                            ...(options.body ? { "Content-Type": "application/json" } : {}),
+                            ...options.headers
+                        }
+                    });
+
+                    const text = await response.text();
+                    let data = null;
+
+                    if (text) {
+                        try {
+                            data = JSON.parse(text);
+                        } catch {
+                            data = text;
+                        }
+                    }
+
+                    if (!response.ok) {
+                        const message =
+                            data && typeof data === "object"
+                                ? data.message || data.error || JSON.stringify(data)
+                                : data || `Request failed (${response.status})`;
+
+                        throw new Error(message);
+                    }
+
+                    return data;
+                }
+
+                function escapeText(value) {
+                    return String(value ?? "");
+                }
+
+                async function loadStudents() {
+                    recordsMessage.textContent = "";
+
+                    const table = document.getElementById("studentTable");
+                    table.replaceChildren();
+
+                    try {
+                        const students = await apiRequest(`${API}/students`);
+
+                        if (!Array.isArray(students)) {
+                            throw new Error("Unexpected student list response.");
+                        }
+
+                        document.getElementById("totalStudents").textContent =
+                            students.length;
+
+                        if (students.length === 0) {
+                            const row = document.createElement("tr");
+                            const cell = document.createElement("td");
+
+                            cell.colSpan = 5;
+                            cell.className = "empty";
+                            cell.textContent = "No students found. Add a student above.";
+
+                            row.appendChild(cell);
+                            table.appendChild(row);
+                            return;
+                        }
+
+                        students.forEach(student => {
+                            const row = document.createElement("tr");
+
+                            const rollCell = document.createElement("td");
+                            rollCell.textContent = escapeText(student.roll_no);
+
+                            const nameCell = document.createElement("td");
+                            nameCell.textContent = escapeText(student.name);
+
+                            const averageCell = document.createElement("td");
+                            averageCell.textContent =
+                                student.average == null
+                                    ? "—"
+                                    : Number(student.average).toFixed(2);
+
+                            const gradeCell = document.createElement("td");
+                            gradeCell.textContent = student.grade || "—";
+
+                            const actionCell = document.createElement("td");
+                            const actions = document.createElement("div");
+                            actions.className = "row-actions";
+
+                            const deleteButton = document.createElement("button");
+                            deleteButton.type = "button";
+                            deleteButton.className = "danger";
+                            deleteButton.textContent = "Delete";
+
+                            deleteButton.addEventListener("click", async () => {
+                                const roll = student.roll_no;
+
+                                if (!confirm(
+                                    `Delete student ${student.name} (Roll No: ${roll})?`
+                                )) {
+                                    return;
+                                }
+
+                                deleteButton.disabled = true;
+
+                                try {
+                                    await apiRequest(
+                                        `${API}/students/${encodeURIComponent(roll)}`,
+                                        { method: "DELETE" }
+                                    );
+
+                                    showMessage(
+                                        recordsMessage,
+                                        "Student deleted successfully.",
+                                        true
+                                    );
+
+                                    await loadStudents();
+                                } catch (error) {
+                                    showMessage(
+                                        recordsMessage,
+                                        `Delete failed: ${error.message}`
+                                    );
+                                    deleteButton.disabled = false;
+                                }
+                            });
+
+                            actions.appendChild(deleteButton);
+                            actionCell.appendChild(actions);
+
+                            row.append(
+                                rollCell,
+                                nameCell,
+                                averageCell,
+                                gradeCell,
+                                actionCell
+                            );
+
+                            table.appendChild(row);
+                        });
+                    } catch (error) {
+                        document.getElementById("totalStudents").textContent = "—";
+
+                        const row = document.createElement("tr");
+                        const cell = document.createElement("td");
+
+                        cell.colSpan = 5;
+                        cell.className = "empty";
+                        cell.textContent = "Unable to load student records.";
+
+                        row.appendChild(cell);
+                        table.appendChild(row);
+
+                        showMessage(
+                            recordsMessage,
+                            `Could not load records: ${error.message}. Check that the Drogon server is running and CORS is configured.`
+                        );
+                    }
+                }
+
+                // Add a student
+                document.getElementById("addStudentForm")
+                    .addEventListener("submit", async event => {
+                        event.preventDefault();
+
+                        const rollNo = document.getElementById("rollNo").value.trim();
+                        const name = document.getElementById("studentName").value.trim();
+
+                        if (!rollNo || !name || Number(rollNo) <= 0) {
+                            showMessage(addMessage, "Enter a valid roll number and name.");
+                            return;
+                        }
+
+                        try {
+                            await apiRequest(`${API}/students`, {
+                                method: "POST",
+                                body: JSON.stringify({
+                                    roll_no: Number(rollNo),
+                                    name: name
+                                })
+                            });
+
+                            showMessage(addMessage, "Student added successfully.", true);
+                            event.target.reset();
+                            await loadStudents();
+                        } catch (error) {
+                            showMessage(addMessage, `Could not add student: ${error.message}`);
+                        }
+                    });
+
+                // Add or update subject marks
+                async function saveMarks(update) {
+                    const roll = document.getElementById("marksRollNo").value.trim();
+                    const subject = document.getElementById("subjectName").value.trim();
+                    const marksValue = document.getElementById("subjectMarks").value;
+
+                    if (!roll || !subject || marksValue === "") {
+                        showMessage(marksMessage, "Fill in all subject marks fields.");
+                        return;
+                    }
+
+                    const marks = Number(marksValue);
+
+                    if (!Number.isInteger(marks) || marks < 0 || marks > 100) {
+                        showMessage(marksMessage, "Marks must be a whole number from 0 to 100.");
+                        return;
+                    }
+
+                    const encodedRoll = encodeURIComponent(roll);
+                    const encodedSubject = encodeURIComponent(subject);
+
+                    const url = update
+                        ? `${API}/students/${encodedRoll}/marks/${encodedSubject}`
+                        : `${API}/students/${encodedRoll}/marks`;
+
+                    try {
+                        await apiRequest(url, {
+                            method: update ? "PUT" : "POST",
+                            body: JSON.stringify(
+                                update
+                                    ? { marks: marks }
+                                    : { subject_name: subject, marks: marks }
+                            )
+                        });
+
+                        showMessage(
+                            marksMessage,
+                            update ? "Marks updated successfully." : "Marks added successfully.",
+                            true
+                        );
+
+                        await loadStudents();
+                    } catch (error) {
+                        showMessage(
+                            marksMessage,
+                            `Could not ${update ? "update" : "add"} marks: ${error.message}`
+                        );
+                    }
+                }
+
+                document.getElementById("addMarksButton")
+                    .addEventListener("click", () => saveMarks(false));
+
+                document.getElementById("updateMarksButton")
+                    .addEventListener("click", () => saveMarks(true));
+
+                document.getElementById("refreshButton")
+                    .addEventListener("click", loadStudents);
+
+                // Load records when the admin dashboard opens
+                loadStudents();
+    </script>
+</body>
+</html>
